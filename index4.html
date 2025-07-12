@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>🎉 Happy Birthday</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --card: #fff0f5;
+      --duration: 0.6s;
+    }
+    * { box-sizing: border-box; }
+    html, body {
+      height: 100%; margin: 0;
+      display: flex; justify-content: center; align-items: center;
+      background: linear-gradient(135deg, #ffe9e9, #ffc4d6);
+      font-family: "Poppins", sans-serif;
+      overflow: hidden;
+    }
+
+    #name {
+      position: absolute;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Pacifico", cursive;
+      font-size: 64px;
+      color: #ff3956;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #gift {
+      width: 220px; height: 220px;
+      cursor: pointer;
+      transition: transform var(--duration) ease;
+    }
+    #gift:active { transform: scale(0.95); }
+    #gift.hide { animation: vanish .8s forwards; }
+    @keyframes vanish { to { opacity: 0; transform: scale(0.3) rotate(20deg); } }
+
+    #card {
+      display: none;
+      background: var(--card);
+      padding: 40px 30px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      max-width: 600px;
+      animation: fadeIn 1s ease forwards;
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+    .line { font-size: 20px; margin: 10px 0; color: #333; }
+    .hidden span { visibility: hidden; }
+
+    canvas#confetti-canvas {
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+  <h1 id="name">Hồng&nbsp;Minh</h1>
+  <img id="gift" src="4324.png_1200.png" alt="Gift box">
+  <div id="card">
+    <div class="line hidden">Chúc bạn sinh nhật vui vẻ nha. 🥳</div>
+    <div class="line hidden">Mong rằng mọi điều bạn mong ước đều thành hiện thực. ✨</div>
+    <div class="line hidden">Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày 😊</div>
+    <div class="line hidden">Dù chẳng nói ra... nhưng vẫn luôn quan tâm đấy! 💖</div>
+  </div>
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    const gift  = document.getElementById('gift');
+    const card  = document.getElementById('card');
+    const lines = document.querySelectorAll('.line');
+
+    gift.addEventListener('click', () => {
+      gift.classList.add('hide');
+      setTimeout(() => {
+        gift.style.display = 'none';
+        card.style.display = 'block';
+        revealLines();
+        startConfetti();
+      }, 800);
+    });
+
+    function revealLines() {
+      let delay = 0;
+      lines.forEach(line => {
+        const text = line.textContent;
+        line.innerHTML = '';
+        line.classList.remove('hidden');
+        [...text].forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.visibility = 'hidden';
+          line.appendChild(span);
+          setTimeout(() => span.style.visibility = 'visible', delay + i * 50);
+        });
+        delay += text.length * 50 + 500;
+      });
+    }
+
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let confetti = [];
+    const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initConfetti() {
+      confetti = [];
+      for (let i = 0; i < 180; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 50 + 10,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.floor(Math.random() * 10) - 10,
+          tiltAngleIncrement: (Math.random() * 0.07) + 0.05,
+          tiltAngle: 0
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.lineWidth = c.r;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt + (c.r / 2), c.y);
+        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + (c.r / 2));
+        ctx.stroke();
+      });
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      confetti.forEach(c => {
+        c.y += Math.cos(c.d) + 3;
+        c.tiltAngle += c.tiltAngleIncrement;
+        c.tilt = Math.sin(c.tiltAngle) * 15;
+        if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    function startConfetti() {
+      resizeCanvas();
+      initConfetti();
+      (function animate() {
+        drawConfetti();
+        requestAnimationFrame(animate);
+      })();
+    }
+
+    window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
