@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>🎁 Happy Birthday</title>
+  <style>
+    :root {
+      --pink: #ffb6c1;
+      --card: #fff0f5;
+      --duration: 0.6s;
+    }
+    *{box-sizing:border-box}
+    html,body{
+      height:100%;margin:0;display:flex;justify-content:center;align-items:center;
+      background: linear-gradient(135deg,#ff9eb4 0%,#ffc1ce 100%);
+      font-family: "Poppins", sans-serif;
+    }
+    /* ---------- Hộp quà ---------- */
+    #gift{
+      width:220px;height:220px;cursor:pointer;
+      transition: transform var(--duration) ease;
+    }
+    #gift:active{transform: scale(.95);}
+    #gift.hide{animation: vanish .8s forwards;}
+    @keyframes vanish{to{opacity:0;transform:scale(.3) rotate(20deg)}}
+    /* ---------- Khung lời chúc ---------- */
+    #card{
+      display:none;           /* ẩn lúc đầu */
+      background:var(--card);
+      padding:40px 30px;
+      border-radius:20px;
+      box-shadow:0 12px 30px rgba(0,0,0,.12);
+      max-width:600px;
+      text-align:center;
+    }
+    #card.show{display:block;animation: pop .7s ease;}
+    @keyframes pop{
+      0%{transform:scale(.5);opacity:0}
+      70%{transform:scale(1.05)}
+      100%{transform:scale(1);opacity:1}
+    }
+    .line{
+      font-size:1.3rem;
+      margin:15px 0;
+      min-height:1.5em;       /* giữ chỗ khi chưa gõ xong */
+      white-space:pre-wrap;
+    }
+    /* Con trỏ gõ */
+    .cursor{
+      display:inline-block;
+      width:2px;height:1.2em;
+      background:#333;
+      animation:blink .8s steps(1) infinite;
+      vertical-align:middle;
+    }
+    @keyframes blink{50%{opacity:0}}
+  </style>
+</head>
+<body>
+
+  <!-- 1. Hộp quà -->
+  <img id="gift" src="https://raw.githubusercontent.com/ikatyang/emoji-cheat-sheet/master/graphics/emojis/gift.png" alt="Gift box">
+
+  <!-- 2. Card lời chúc -->
+  <div id="card">
+      <div id="line1" class="line"></div>
+      <div id="line2" class="line"></div>
+      <div id="line3" class="line"></div>
+  </div>
+
+<script>
+/* ---------- Nội dung lời chúc ---------- */
+const lines = [
+  "🎉 Chúc bạn sinh nhật vui vẻ nha!",
+  "Mong rằng mọi điều bạn mong ước đều thành hiện thực.",
+  "Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày –\n   dù chẳng nói ra nhưng vẫn luôn quan tâm đấy 😊"
+];
+
+/* ---------- Bắt sự kiện mở quà ---------- */
+const gift  = document.getElementById("gift");
+const card  = document.getElementById("card");
+
+gift.onclick = () => {
+  gift.classList.add("hide");          // hiệu ứng biến mất
+  setTimeout(()=>{
+    gift.style.display="none";         // ẩn hẳn sau animation
+    card.classList.add("show");        // hiện card
+    startType();                       // bắt đầu gõ chữ
+  }, 800);
+};
+
+/* ---------- Hàm gõ chữ dòng-theo-dòng ---------- */
+function typeLine(text, idx, cb){
+  const container = document.getElementById(`line${idx+1}`);
+  let i = 0;
+  const cursor = document.createElement("span");
+  cursor.className = "cursor";
+  container.appendChild(cursor);
+
+  const typer = setInterval(()=>{
+    container.insertBefore(document.createTextNode(text[i]), cursor);
+    i++;
+    if(i === text.length){
+      clearInterval(typer);
+      cursor.remove();
+      cb && cb();
+    }
+  }, 40);                              // tốc độ gõ (ms/ký tự)
+}
+
+function startType(){
+  typeLine(lines[0],0, ()=>{
+    typeLine(lines[1],1, ()=>{
+      typeLine(lines[2],2);            // dòng cuối không cần callback
+    });
+  });
+}
+</script>
+</body>
+</html>
