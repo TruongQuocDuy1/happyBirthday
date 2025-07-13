@@ -161,6 +161,34 @@
       background-color: #ff80ab;
       color: white;
     }
+
+    #love-img {
+      display: none;
+      position: absolute;
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 11;
+    }
+
+    #my-love-text {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      color: red;
+      animation: flash 1s infinite;
+      z-index: 11;
+    }
+
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
@@ -187,137 +215,24 @@
     Từ trước đến giờ bạn có tình cảm với t không á?<br>
     Nếu bạn chọn có thì phần sau là phần dành cho bạn đấy.<br>
     Nếu bạn chọn không thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.</p>
-    <button onclick="alert('Bạn chọn Có! (Sẽ xử lý thêm sau)')">Có</button>
-    <button>Không</button>
+    <button id="yes-btn">Có</button>
+    <button id="no-btn">Không</button>
   </div>
+
+  <img id="love-img" src="doanvan.png" alt="Lời tỏ tình">
+  <div id="my-love-text">My Love ❤️</div>
 
   <canvas id="confetti-canvas"></canvas>
 
   <script>
-    const gift  = document.getElementById('gift');
-    const card  = document.getElementById('card');
-    const lines = document.querySelectorAll('.line');
-    const nextStep = document.getElementById('next-step');
-    const questionBox = document.getElementById('question-box');
-    const cornerImgs = [
-      document.getElementById('img1'),
-      document.getElementById('img2'),
-      document.getElementById('img3'),
-      document.getElementById('img4')
-    ];
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
 
-    gift.addEventListener('click', () => {
-      gift.classList.add('hide');
-      document.getElementById('gift-note').style.display = 'none';
-      setTimeout(() => {
-        gift.style.display = 'none';
-        card.style.display = 'block';
-        revealLines();
-        startConfetti();
-      }, 800);
+    yesBtn.addEventListener('click', () => {
+      document.getElementById('question-box').style.display = 'none';
+      document.getElementById('love-img').style.display = 'block';
+      document.getElementById('my-love-text').style.display = 'block';
     });
-
-    function revealLines() {
-      let delay = 0;
-      lines.forEach((line, index) => {
-        const text = line.textContent;
-        line.innerHTML = '';
-        line.classList.remove('hidden');
-        [...text].forEach((ch, i) => {
-          const span = document.createElement('span');
-          span.textContent = ch;
-          span.style.visibility = 'hidden';
-          line.appendChild(span);
-          setTimeout(() => span.style.visibility = 'visible', delay + i * 50);
-        });
-        delay += text.length * 50 + 500;
-
-        if (index === lines.length - 1) {
-          setTimeout(showCornerImages, delay);
-        }
-      });
-    }
-
-    function showCornerImages() {
-      cornerImgs.forEach(img => {
-        img.style.display = 'block';
-        setTimeout(() => {
-          img.style.opacity = 1;
-        }, 100);
-      });
-      setTimeout(() => {
-        nextStep.style.display = 'block';
-      }, 1000);
-    }
-
-    nextStep.addEventListener('click', () => {
-      card.style.display = 'none';
-      cornerImgs.forEach(img => img.style.display = 'none');
-      nextStep.style.display = 'none';
-      questionBox.style.display = 'block';
-    });
-
-    const canvas = document.getElementById('confetti-canvas');
-    const ctx = canvas.getContext('2d');
-    let confetti = [];
-    const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
-
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    }
-
-    function initConfetti() {
-      confetti = [];
-      for (let i = 0; i < 180; i++) {
-        confetti.push({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height - canvas.height,
-          r: Math.random() * 6 + 4,
-          d: Math.random() * 50 + 10,
-          color: colors[Math.floor(Math.random() * colors.length)],
-          tilt: Math.floor(Math.random() * 10) - 10,
-          tiltAngleIncrement: (Math.random() * 0.07) + 0.05,
-          tiltAngle: 0
-        });
-      }
-    }
-
-    function drawConfetti() {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      confetti.forEach(c => {
-        ctx.beginPath();
-        ctx.lineWidth = c.r;
-        ctx.strokeStyle = c.color;
-        ctx.moveTo(c.x + c.tilt + (c.r / 2), c.y);
-        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + (c.r / 2));
-        ctx.stroke();
-      });
-      updateConfetti();
-    }
-
-    function updateConfetti() {
-      confetti.forEach(c => {
-        c.y += Math.cos(c.d) + 3;
-        c.tiltAngle += c.tiltAngleIncrement;
-        c.tilt = Math.sin(c.tiltAngle) * 15;
-        if (c.y > canvas.height) {
-          c.y = -10;
-          c.x = Math.random() * canvas.width;
-        }
-      });
-    }
-
-    function startConfetti() {
-      resizeCanvas();
-      initConfetti();
-      (function animate() {
-        drawConfetti();
-        requestAnimationFrame(animate);
-      })();
-    }
-
-    window.addEventListener('resize', resizeCanvas);
   </script>
 </body>
 </html>
