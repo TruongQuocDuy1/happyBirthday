@@ -78,6 +78,7 @@
       max-width: 600px;
       animation: fadeIn 1s ease forwards;
       z-index: 10;
+      text-align: center;
     }
 
     @keyframes fadeIn {
@@ -117,36 +118,49 @@
     #img2 { bottom: 30px; left: 100px; }
     #img3 { top: 30px; right: 100px; }
     #img4 { bottom: 30px; right: 100px; }
+
+    #next-step {
+      display: none;
+      margin-top: 30px;
+      font-size: 18px;
+      color: #ff4d6d;
+      font-weight: bold;
+      cursor: pointer;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
   </style>
 </head>
 <body>
   <h1 id="name">Hồng&nbsp;Minh</h1>
   <div id="gift-note">Click vào hộp quà nha 🎁</div>
 
-  <!-- Ảnh ẩn -->
   <img id="img1" class="corner-img" src="1.jpg" alt="Ảnh 1">
   <img id="img2" class="corner-img" src="2.jpg" alt="Ảnh 2">
   <img id="img3" class="corner-img" src="3.jpg" alt="Ảnh 3">
   <img id="img4" class="corner-img" src="4.jpg" alt="Ảnh 4">
 
-  <!-- Hộp quà -->
   <img id="gift" src="4324.png_1200.png" alt="Gift box">
 
-  <!-- Thiệp chúc mừng -->
   <div id="card">
     <div class="line hidden">Chúc bạn sinh nhật vui vẻ nha. 🥳</div>
     <div class="line hidden">Mong rằng mọi điều bạn mong ước đều thành hiện thực nhé. ✨</div>
     <div class="line hidden">Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày đó 😊</div>
     <div class="line hidden">Dù chẳng nói ra... nhưng vẫn luôn quan tâm đấy nha! 💖</div>
+    <div id="next-step">↓ Tiếp tục ↓</div>
   </div>
 
-  <!-- Confetti -->
   <canvas id="confetti-canvas"></canvas>
 
   <script>
     const gift  = document.getElementById('gift');
     const card  = document.getElementById('card');
     const lines = document.querySelectorAll('.line');
+    const nextStep = document.getElementById('next-step');
     const cornerImgs = [
       document.getElementById('img1'),
       document.getElementById('img2'),
@@ -193,6 +207,9 @@
           img.style.opacity = 1;
         }, 100);
       });
+      setTimeout(() => {
+        nextStep.style.display = 'block';
+      }, 1000);
     }
 
     const canvas = document.getElementById('confetti-canvas');
