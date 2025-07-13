@@ -133,11 +133,39 @@
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
+
+    #question-box {
+      display: none;
+      background: var(--card);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      max-width: 600px;
+      text-align: center;
+      z-index: 10;
+      position: absolute;
+    }
+
+    #question-box p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    #question-box button {
+      margin: 0 10px;
+      padding: 10px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      background-color: #ff80ab;
+      color: white;
+    }
   </style>
 </head>
 <body>
   <h1 id="name">Hồng&nbsp;Minh</h1>
-  <div id="gift-note">Click vào hộp quà nha 🎁</div>
+  <div id="gift-note">Click vào hộp quà nha 🏱</div>
 
   <img id="img1" class="corner-img" src="1.jpg" alt="Ảnh 1">
   <img id="img2" class="corner-img" src="2.jpg" alt="Ảnh 2">
@@ -154,6 +182,15 @@
     <div id="next-step">↓ Tiếp tục ↓</div>
   </div>
 
+  <div id="question-box">
+    <p>Trước khi vào t hỏi bạn một câu phải trả lời thật lòng nhé:<br>
+    Từ trước đến giờ bạn có tình cảm với t không á?<br>
+    Nếu bạn chọn có thì phần sau là phần dành cho bạn đấy.<br>
+    Nếu bạn chọn không thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.</p>
+    <button onclick="alert('Bạn chọn Có! (Sẽ xử lý thêm sau)')">Có</button>
+    <button>Không</button>
+  </div>
+
   <canvas id="confetti-canvas"></canvas>
 
   <script>
@@ -161,6 +198,7 @@
     const card  = document.getElementById('card');
     const lines = document.querySelectorAll('.line');
     const nextStep = document.getElementById('next-step');
+    const questionBox = document.getElementById('question-box');
     const cornerImgs = [
       document.getElementById('img1'),
       document.getElementById('img2'),
@@ -211,6 +249,13 @@
         nextStep.style.display = 'block';
       }, 1000);
     }
+
+    nextStep.addEventListener('click', () => {
+      card.style.display = 'none';
+      cornerImgs.forEach(img => img.style.display = 'none');
+      nextStep.style.display = 'none';
+      questionBox.style.display = 'block';
+    });
 
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
