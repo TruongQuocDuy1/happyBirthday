@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>🎉 Happy Birthday</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      height: 100%;
+      font-family: "Poppins", sans-serif;
+      background: linear-gradient(135deg, #ffe9e9, #ffc4d6);
+      overflow: hidden;
+    }
+
+    #name {
+      position: absolute;
+      top: 25px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: "Pacifico", cursive;
+      font-size: 60px;
+      color: #ff3956;
+      z-index: 5;
+    }
+
+    #card {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: #fff0f5;
+      padding: 30px 20px;
+      border-radius: 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+      max-width: 90vw;
+      text-align: center;
+      z-index: 5;
+    }
+
+    .line {
+      font-size: 18px;
+      margin: 10px 0;
+      color: #333;
+    }
+
+    #arrow {
+      font-size: 24px;
+      margin-top: 20px;
+      cursor: pointer;
+      animation: bounce 1s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    #question {
+      display: none;
+      position: absolute;
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: white;
+      padding: 25px;
+      border-radius: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+      z-index: 10;
+      max-width: 90vw;
+      text-align: center;
+    }
+
+    #question p {
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
+
+    #yesBtn, #noBtn {
+      padding: 10px 20px;
+      margin: 10px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #yesBtn { background: #ff6781; color: white; }
+    #noBtn { background: #ccc; }
+
+    /* Ảnh thư tình */
+    #love-letter-img {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      max-width: 95vw;
+      max-height: 90vh;
+      z-index: 20;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
+      border-radius: 20px;
+    }
+
+    /* My Love */
+    #myLove {
+      display: none;
+      position: fixed;
+      top: calc(50% + 220px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      color: red;
+      font-weight: bold;
+      z-index: 21;
+      animation: blink 1s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 1; }
+      50% { opacity: 0.1; }
+      100% { opacity: 1; }
+    }
+
+    canvas#confetti-canvas {
+      position: fixed;
+      top: 0; left: 0;
+      width: 100vw;
+      height: 100vh;
+      z-index: 0;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="name">Hồng Minh</h1>
+
+  <div id="card">
+    <div class="line">Chúc bạn sinh nhật vui vẻ nha. 🥳</div>
+    <div class="line">Mong rằng mọi điều bạn mong ước đều thành hiện thực nhé. ✨</div>
+    <div class="line">Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày đó 😊</div>
+    <div class="line">Dù chẳng nói ra... nhưng vẫn luôn quan tâm đấy nha! 💖</div>
+    <div id="arrow">⬇️</div>
+  </div>
+
+  <!-- Câu hỏi -->
+  <div id="question">
+    <p>Trước khi vào t hỏi bạn một câu phải trả lời thật lòng nhé:<br><b>Từ trước đến giờ bạn có tình cảm với t không á?</b><br><br>
+      Nếu bạn chọn <b>có</b> thì phần sau là phần dành cho bạn đấy.<br>
+      Nếu bạn chọn <b>không</b> thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.
+    </p>
+    <button id="yesBtn">Có</button>
+    <button id="noBtn">Không</button>
+  </div>
+
+  <!-- Ảnh đoạn văn -->
+  <img id="love-letter-img" src="đoạn văn.png" alt="Thư tỏ tình">
+  <div id="myLove">My Love ❤️</div>
+
+  <!-- Confetti -->
+  <canvas id="confetti-canvas"></canvas>
+
+  <script>
+    // Confetti setup
+    const canvas = document.getElementById('confetti-canvas');
+    const ctx = canvas.getContext('2d');
+    let confetti = [];
+    const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+
+    function initConfetti() {
+      confetti = [];
+      for (let i = 0; i < 180; i++) {
+        confetti.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          r: Math.random() * 6 + 4,
+          d: Math.random() * 50 + 10,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          tilt: Math.floor(Math.random() * 10) - 10,
+          tiltAngleIncrement: (Math.random() * 0.07) + 0.05,
+          tiltAngle: 0
+        });
+      }
+    }
+
+    function drawConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confetti.forEach(c => {
+        ctx.beginPath();
+        ctx.lineWidth = c.r;
+        ctx.strokeStyle = c.color;
+        ctx.moveTo(c.x + c.tilt + (c.r / 2), c.y);
+        ctx.lineTo(c.x + c.tilt, c.y + c.tilt + (c.r / 2));
+        ctx.stroke();
+      });
+      updateConfetti();
+    }
+
+    function updateConfetti() {
+      confetti.forEach(c => {
+        c.y += Math.cos(c.d) + 3;
+        c.tiltAngle += c.tiltAngleIncrement;
+        c.tilt = Math.sin(c.tiltAngle) * 15;
+        if (c.y > canvas.height) {
+          c.y = -10;
+          c.x = Math.random() * canvas.width;
+        }
+      });
+    }
+
+    function startConfetti() {
+      resizeCanvas();
+      initConfetti();
+      (function animate() {
+        drawConfetti();
+        requestAnimationFrame(animate);
+      })();
+    }
+
+    // Hiện câu hỏi khi bấm mũi tên
+    document.getElementById('arrow').addEventListener('click', () => {
+      document.getElementById('card').style.display = 'none';
+      document.getElementById('question').style.display = 'block';
+    });
+
+    // Nếu chọn "Có"
+    document.getElementById('yesBtn').addEventListener('click', () => {
+      document.getElementById('question').style.display = 'none';
+      document.getElementById('love-letter-img').style.display = 'block';
+
+      setTimeout(() => {
+        document.getElementById('myLove').style.display = 'block';
+      }, 6000);
+    });
+
+    // Nếu chọn "Không" thì không làm gì
+
+    // Bắt đầu
+    startConfetti();
+    window.addEventListener('resize', resizeCanvas);
+  </script>
+</body>
+</html>
