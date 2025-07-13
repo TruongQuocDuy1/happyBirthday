@@ -3,17 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <title>🎉 Happy Birthday</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
   <style>
-    * {
-      box-sizing: border-box;
+    :root {
+      --card: #fff0f5;
+      --duration: 0.6s;
     }
-
+    * { box-sizing: border-box; }
     html, body {
-      margin: 0;
-      height: 100%;
-      font-family: "Poppins", sans-serif;
+      height: 100%; margin: 0;
+      display: flex; justify-content: center; align-items: center;
       background: linear-gradient(135deg, #ffe9e9, #ffc4d6);
+      font-family: "Poppins", sans-serif;
       overflow: hidden;
     }
 
@@ -23,150 +25,176 @@
       left: 50%;
       transform: translateX(-50%);
       font-family: "Pacifico", cursive;
-      font-size: 60px;
+      font-size: 64px;
       color: #ff3956;
-      z-index: 5;
+      user-select: none;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+
+    #gift-note {
+      position: absolute;
+      top: calc(50% - 230px);
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 22px;
+      color: #ff4d6d;
+      font-weight: bold;
+      font-family: 'Pacifico', cursive;
+      background: rgba(255, 255, 255, 0.7);
+      padding: 10px 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      z-index: 10;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0% { transform: translateX(-50%) scale(1); opacity: 1; }
+      50% { transform: translateX(-50%) scale(1.05); opacity: 0.9; }
+      100% { transform: translateX(-50%) scale(1); opacity: 1; }
+    }
+
+    #gift {
+      width: 300px; height: 300px;
+      cursor: pointer;
+      transition: transform var(--duration) ease;
+      z-index: 10;
+    }
+
+    #gift:active { transform: scale(0.95); }
+    #gift.hide { animation: vanish .8s forwards; }
+
+    @keyframes vanish {
+      to { opacity: 0; transform: scale(0.3) rotate(20deg); }
     }
 
     #card {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff0f5;
-      padding: 30px 20px;
+      display: none;
+      background: var(--card);
+      padding: 40px 30px;
       border-radius: 20px;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-      max-width: 90vw;
-      text-align: center;
-      z-index: 5;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+      max-width: 600px;
+      animation: fadeIn 1s ease forwards;
+      z-index: 10;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .line {
-      font-size: 18px;
+      font-size: 20px;
       margin: 10px 0;
       color: #333;
     }
 
-    #arrow {
-      font-size: 24px;
-      margin-top: 20px;
-      cursor: pointer;
-      animation: bounce 1s infinite;
-    }
-
-    @keyframes bounce {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    #question {
-      display: none;
-      position: absolute;
-      top: 55%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: white;
-      padding: 25px;
-      border-radius: 16px;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-      z-index: 10;
-      max-width: 90vw;
-      text-align: center;
-    }
-
-    #question p {
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    #yesBtn, #noBtn {
-      padding: 10px 20px;
-      margin: 10px;
-      font-size: 16px;
-      border: none;
-      border-radius: 10px;
-      cursor: pointer;
-    }
-
-    #yesBtn { background: #ff6781; color: white; }
-    #noBtn { background: #ccc; }
-
-    /* Ảnh thư tình */
-    #love-letter-img {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      max-width: 95vw;
-      max-height: 90vh;
-      z-index: 20;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.3);
-      border-radius: 20px;
-    }
-
-    /* My Love */
-    #myLove {
-      display: none;
-      position: fixed;
-      top: calc(50% + 220px);
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 32px;
-      color: red;
-      font-weight: bold;
-      z-index: 21;
-      animation: blink 1s infinite;
-    }
-
-    @keyframes blink {
-      0% { opacity: 1; }
-      50% { opacity: 0.1; }
-      100% { opacity: 1; }
-    }
+    .hidden span { visibility: hidden; }
 
     canvas#confetti-canvas {
-      position: fixed;
-      top: 0; left: 0;
-      width: 100vw;
-      height: 100vh;
-      z-index: 0;
-      pointer-events: none;
+      position: fixed; inset: 0;
+      width: 100%; height: 100%;
+      pointer-events: none; z-index: 1;
     }
+
+    .corner-img {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      object-fit: cover;
+      border-radius: 20px;
+      border: 4px solid rgba(255, 255, 255, 0.7);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+      z-index: 5;
+      display: none;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #img1 { top: 30px; left: 100px; }
+    #img2 { bottom: 30px; left: 100px; }
+    #img3 { top: 30px; right: 100px; }
+    #img4 { bottom: 30px; right: 100px; }
   </style>
 </head>
 <body>
+  <h1 id="name">Hồng&nbsp;Minh</h1>
+  <div id="gift-note">Click vào hộp quà nha 🎁</div>
 
-  <h1 id="name">Hồng Minh</h1>
+  <!-- Ảnh ẩn -->
+  <img id="img1" class="corner-img" src="1.jpg" alt="Ảnh 1">
+  <img id="img2" class="corner-img" src="2.jpg" alt="Ảnh 2">
+  <img id="img3" class="corner-img" src="3.jpg" alt="Ảnh 3">
+  <img id="img4" class="corner-img" src="4.jpg" alt="Ảnh 4">
 
+  <!-- Hộp quà -->
+  <img id="gift" src="4324.png_1200.png" alt="Gift box">
+
+  <!-- Thiệp chúc mừng -->
   <div id="card">
-    <div class="line">Chúc bạn sinh nhật vui vẻ nha. 🥳</div>
-    <div class="line">Mong rằng mọi điều bạn mong ước đều thành hiện thực nhé. ✨</div>
-    <div class="line">Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày đó 😊</div>
-    <div class="line">Dù chẳng nói ra... nhưng vẫn luôn quan tâm đấy nha! 💖</div>
-    <div id="arrow">⬇️</div>
+    <div class="line hidden">Chúc bạn sinh nhật vui vẻ nha. 🥳</div>
+    <div class="line hidden">Mong rằng mọi điều bạn mong ước đều thành hiện thực nhé. ✨</div>
+    <div class="line hidden">Có người luôn âm thầm chúc bạn hạnh phúc mỗi ngày đó 😊</div>
+    <div class="line hidden">Dù chẳng nói ra... nhưng vẫn luôn quan tâm đấy nha! 💖</div>
   </div>
-
-  <!-- Câu hỏi -->
-  <div id="question">
-    <p>Trước khi vào t hỏi bạn một câu phải trả lời thật lòng nhé:<br><b>Từ trước đến giờ bạn có tình cảm với t không á?</b><br><br>
-      Nếu bạn chọn <b>có</b> thì phần sau là phần dành cho bạn đấy.<br>
-      Nếu bạn chọn <b>không</b> thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.
-    </p>
-    <button id="yesBtn">Có</button>
-    <button id="noBtn">Không</button>
-  </div>
-
-  <!-- Ảnh đoạn văn -->
-  <img id="love-letter-img" src="đoạn văn.png" alt="Thư tỏ tình">
-  <div id="myLove">My Love ❤️</div>
 
   <!-- Confetti -->
   <canvas id="confetti-canvas"></canvas>
 
   <script>
-    // Confetti setup
+    const gift  = document.getElementById('gift');
+    const card  = document.getElementById('card');
+    const lines = document.querySelectorAll('.line');
+    const cornerImgs = [
+      document.getElementById('img1'),
+      document.getElementById('img2'),
+      document.getElementById('img3'),
+      document.getElementById('img4')
+    ];
+
+    gift.addEventListener('click', () => {
+      gift.classList.add('hide');
+      document.getElementById('gift-note').style.display = 'none';
+      setTimeout(() => {
+        gift.style.display = 'none';
+        card.style.display = 'block';
+        revealLines();
+        startConfetti();
+      }, 800);
+    });
+
+    function revealLines() {
+      let delay = 0;
+      lines.forEach((line, index) => {
+        const text = line.textContent;
+        line.innerHTML = '';
+        line.classList.remove('hidden');
+        [...text].forEach((ch, i) => {
+          const span = document.createElement('span');
+          span.textContent = ch;
+          span.style.visibility = 'hidden';
+          line.appendChild(span);
+          setTimeout(() => span.style.visibility = 'visible', delay + i * 50);
+        });
+        delay += text.length * 50 + 500;
+
+        if (index === lines.length - 1) {
+          setTimeout(showCornerImages, delay);
+        }
+      });
+    }
+
+    function showCornerImages() {
+      cornerImgs.forEach(img => {
+        img.style.display = 'block';
+        setTimeout(() => {
+          img.style.opacity = 1;
+        }, 100);
+      });
+    }
+
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
     let confetti = [];
@@ -227,26 +255,6 @@
       })();
     }
 
-    // Hiện câu hỏi khi bấm mũi tên
-    document.getElementById('arrow').addEventListener('click', () => {
-      document.getElementById('card').style.display = 'none';
-      document.getElementById('question').style.display = 'block';
-    });
-
-    // Nếu chọn "Có"
-    document.getElementById('yesBtn').addEventListener('click', () => {
-      document.getElementById('question').style.display = 'none';
-      document.getElementById('love-letter-img').style.display = 'block';
-
-      setTimeout(() => {
-        document.getElementById('myLove').style.display = 'block';
-      }, 6000);
-    });
-
-    // Nếu chọn "Không" thì không làm gì
-
-    // Bắt đầu
-    startConfetti();
     window.addEventListener('resize', resizeCanvas);
   </script>
 </body>
