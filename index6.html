@@ -69,6 +69,37 @@
       to { opacity: 0; transform: scale(0.3) rotate(20deg); }
     }
 
+    
+    #love-img {
+      display: none;
+      position: absolute;
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 11;
+    }
+    
+    #my-love-text {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      color: red;
+      animation: flash 1s infinite;
+      z-index: 11;
+    }
+    
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+
+
+    
     #card {
       display: none;
       background: var(--card);
@@ -189,11 +220,25 @@
     Nếu bạn chọn không thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.</p>
     <button onclick="alert('Bạn chọn Có! (Sẽ xử lý thêm sau)')">Có</button>
     <button>Không</button>
+    <img id="love-img" src="doanvan.png" alt="Lời tỏ tình">
+    <div id="my-love-text">My Love ❤️</div>
   </div>
 
   <canvas id="confetti-canvas"></canvas>
 
   <script>
+
+
+    const yesBtn = document.getElementById('yes-btn');
+    const noBtn = document.getElementById('no-btn');
+
+    yesBtn.addEventListener('click', () => {
+      document.getElementById('question-box').style.display = 'none';
+      document.getElementById('love-img').style.display = 'block';
+      document.getElementById('my-love-text').style.display = 'block';
+    });
+
+    
     const gift  = document.getElementById('gift');
     const card  = document.getElementById('card');
     const lines = document.querySelectorAll('.line');
