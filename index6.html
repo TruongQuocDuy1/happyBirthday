@@ -18,7 +18,6 @@
       font-family: "Poppins", sans-serif;
       overflow: hidden;
     }
-
     #name {
       position: absolute;
       top: 25px;
@@ -29,9 +28,7 @@
       color: #ff3956;
       user-select: none;
       pointer-events: none;
-      white-space: nowrap;
     }
-
     #gift-note {
       position: absolute;
       top: calc(50% - 230px);
@@ -48,58 +45,22 @@
       z-index: 10;
       animation: pulse 2s infinite;
     }
-
     @keyframes pulse {
       0% { transform: translateX(-50%) scale(1); opacity: 1; }
       50% { transform: translateX(-50%) scale(1.05); opacity: 0.9; }
       100% { transform: translateX(-50%) scale(1); opacity: 1; }
     }
-
     #gift {
       width: 300px; height: 300px;
       cursor: pointer;
       transition: transform var(--duration) ease;
       z-index: 10;
     }
-
     #gift:active { transform: scale(0.95); }
     #gift.hide { animation: vanish .8s forwards; }
-
     @keyframes vanish {
       to { opacity: 0; transform: scale(0.3) rotate(20deg); }
     }
-
-    
-    #love-img {
-      display: none;
-      position: absolute;
-      max-width: 90vw;
-      max-height: 80vh;
-      border-radius: 20px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-      z-index: 11;
-    }
-    
-    #my-love-text {
-      display: none;
-      position: absolute;
-      bottom: 20px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-family: 'Pacifico', cursive;
-      font-size: 40px;
-      color: red;
-      animation: flash 1s infinite;
-      z-index: 11;
-    }
-    
-    @keyframes flash {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.3; }
-    }
-
-
-    
     #card {
       display: none;
       background: var(--card);
@@ -111,26 +72,21 @@
       z-index: 10;
       text-align: center;
     }
-
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
-
     .line {
       font-size: 20px;
       margin: 10px 0;
       color: #333;
     }
-
     .hidden span { visibility: hidden; }
-
     canvas#confetti-canvas {
       position: fixed; inset: 0;
       width: 100%; height: 100%;
       pointer-events: none; z-index: 1;
     }
-
     .corner-img {
       position: absolute;
       width: 300px;
@@ -144,12 +100,10 @@
       opacity: 0;
       transition: opacity 1s ease;
     }
-
     #img1 { top: 30px; left: 100px; }
     #img2 { bottom: 30px; left: 100px; }
     #img3 { top: 30px; right: 100px; }
     #img4 { bottom: 30px; right: 100px; }
-
     #next-step {
       display: none;
       margin-top: 30px;
@@ -159,12 +113,10 @@
       cursor: pointer;
       animation: bounce 2s infinite;
     }
-
     @keyframes bounce {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-10px); }
     }
-
     #question-box {
       display: none;
       background: var(--card);
@@ -176,12 +128,10 @@
       z-index: 10;
       position: absolute;
     }
-
     #question-box p {
       font-size: 18px;
       margin-bottom: 20px;
     }
-
     #question-box button {
       margin: 0 10px;
       padding: 10px 20px;
@@ -192,17 +142,40 @@
       background-color: #ff80ab;
       color: white;
     }
+    #love-img {
+      display: none;
+      position: absolute;
+      max-width: 90vw;
+      max-height: 80vh;
+      border-radius: 20px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      z-index: 11;
+    }
+    #my-love-text {
+      display: none;
+      position: absolute;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-family: 'Pacifico', cursive;
+      font-size: 40px;
+      color: red;
+      animation: flash 1s infinite;
+      z-index: 11;
+    }
+    @keyframes flash {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.3; }
+    }
   </style>
 </head>
 <body>
   <h1 id="name">Hồng&nbsp;Minh</h1>
   <div id="gift-note">Click vào hộp quà nha 🏱</div>
-
   <img id="img1" class="corner-img" src="1.jpg" alt="Ảnh 1">
   <img id="img2" class="corner-img" src="2.jpg" alt="Ảnh 2">
   <img id="img3" class="corner-img" src="3.jpg" alt="Ảnh 3">
   <img id="img4" class="corner-img" src="4.jpg" alt="Ảnh 4">
-
   <img id="gift" src="4324.png_1200.png" alt="Gift box">
 
   <div id="card">
@@ -218,32 +191,21 @@
     Từ trước đến giờ bạn có tình cảm với t không á?<br>
     Nếu bạn chọn có thì phần sau là phần dành cho bạn đấy.<br>
     Nếu bạn chọn không thì bạn dừng ở đây là được rồi không cần đọc phần sau đâu nha.</p>
-    <button onclick="alert('Bạn chọn Có! (Sẽ xử lý thêm sau)')">Có</button>
-    <button>Không</button>
-    <img id="love-img" src="doanvan.png" alt="Lời tỏ tình">
-    <div id="my-love-text">My Love ❤️</div>
+    <button id="yes-btn">Có</button>
+    <button id="no-btn">Không</button>
   </div>
 
+  <img id="love-img" src="doanvan.png" alt="Lời tỏ tình">
+  <div id="my-love-text">My Love ❤️</div>
   <canvas id="confetti-canvas"></canvas>
 
   <script>
-
-
-    const yesBtn = document.getElementById('yes-btn');
-    const noBtn = document.getElementById('no-btn');
-
-    yesBtn.addEventListener('click', () => {
-      document.getElementById('question-box').style.display = 'none';
-      document.getElementById('love-img').style.display = 'block';
-      document.getElementById('my-love-text').style.display = 'block';
-    });
-
-    
     const gift  = document.getElementById('gift');
     const card  = document.getElementById('card');
     const lines = document.querySelectorAll('.line');
     const nextStep = document.getElementById('next-step');
     const questionBox = document.getElementById('question-box');
+    const yesBtn = document.getElementById('yes-btn');
     const cornerImgs = [
       document.getElementById('img1'),
       document.getElementById('img2'),
@@ -260,6 +222,19 @@
         revealLines();
         startConfetti();
       }, 800);
+    });
+
+    nextStep.addEventListener('click', () => {
+      card.style.display = 'none';
+      cornerImgs.forEach(img => img.style.display = 'none');
+      nextStep.style.display = 'none';
+      questionBox.style.display = 'block';
+    });
+
+    yesBtn.addEventListener('click', () => {
+      questionBox.style.display = 'none';
+      document.getElementById('love-img').style.display = 'block';
+      document.getElementById('my-love-text').style.display = 'block';
     });
 
     function revealLines() {
@@ -286,26 +261,15 @@
     function showCornerImages() {
       cornerImgs.forEach(img => {
         img.style.display = 'block';
-        setTimeout(() => {
-          img.style.opacity = 1;
-        }, 100);
+        setTimeout(() => img.style.opacity = 1, 100);
       });
-      setTimeout(() => {
-        nextStep.style.display = 'block';
-      }, 1000);
+      setTimeout(() => nextStep.style.display = 'block', 1000);
     }
-
-    nextStep.addEventListener('click', () => {
-      card.style.display = 'none';
-      cornerImgs.forEach(img => img.style.display = 'none');
-      nextStep.style.display = 'none';
-      questionBox.style.display = 'block';
-    });
 
     const canvas = document.getElementById('confetti-canvas');
     const ctx = canvas.getContext('2d');
-    let confetti = [];
     const colors = ['#fce18a', '#ff726d', '#b48def', '#f4306d'];
+    let confetti = [];
 
     function resizeCanvas() {
       canvas.width = window.innerWidth;
@@ -366,5 +330,3 @@
   </script>
 </body>
 </html>
-
-
